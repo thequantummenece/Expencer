@@ -1,0 +1,111 @@
+{% extends 'basic.html' %}
+
+{% block script %}
+<script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+<script>
+    window.onload = function () {
+        var incomeChart = new CanvasJS.Chart("chartContainerI", {
+            animationEnabled: true, // change to false
+            title: {
+                text: "Here is your Income Chart"
+            },
+            data: [{
+                type: "column",
+                dataPoints: {{ data_pointsI | safe }}
+            }]
+        });
+        incomeChart.render();
+
+        var expenseChart = new CanvasJS.Chart("chartContainerE", {
+            animationEnabled: true, // change to false
+            title: {
+                text: "Here is your Expense Chart"
+            },
+            data: [{
+                type: "column",
+                dataPoints: {{ data_pointsE | safe }}
+            }]
+        });
+        expenseChart.render();
+
+        var expenseCat = new CanvasJS.Chart("chartContainerEC", {
+            theme: "light2",
+            animationEnabled: true,
+            title:{
+                text: "Category Expense Analysis"
+            },
+            data: [{
+                type: "pie",
+                startAngle: -90,
+                yValueFormatString: "#,###'%'",
+                dataPoints: {{ data_pointsCE | safe }}
+            }]
+        });
+        expenseCat.render();
+
+        var incomeCat = new CanvasJS.Chart("chartContainerIC", {
+            theme: "light2",
+            animationEnabled: true,
+            title:{
+                text: "Category Income Analysis"
+            },
+            data: [{
+                type: "pie",
+                startAngle: -90,
+                yValueFormatString: "#,###'%'",
+                dataPoints: {{ data_pointsCI | safe }}
+            }]
+        });
+        incomeCat.render();
+    }
+</script>
+{% endblock script %}
+
+{% block title %} Report {% endblock title %}
+
+{% block expmodelable %}disabled{% endblock expmodelable %}
+{% block incmodelable %}disabled{% endblock incmodelable %}
+
+{% block body %}
+<div class="p-4 p-md-5 mb-4 text-dark rounded bg-light">
+    <div class="col-md-6 px-0">
+      <h1 class="display-4 fst-italic">Welcome to Your Financial Report</h1>
+      <p class="lead my-3">This report provides a comprehensive overview of your financial activities. Here, you will find detailed charts showing your income and expenses over the selected period.</p>
+    </div>
+</div>
+<div class="bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white">
+    <div class="my-3 py-3">
+        <h2 class="display-5">Understanding Your Income</h2>
+        <p class="lead">The income chart displays the total income you have received each month. This helps you to see
+            trends in
+            your
+            earnings and identify any significant changes over time.</p>
+    </div>
+    <div class="bg-light shadow-sm mx-auto" style="width: 70%; height: 400px; border-radius: 21px 21px 0 0;">
+        <div id="chartContainerI" class="chart" style="height: 100%; width: 80%; margin: 0 auto;"></div>
+    </div>
+</div>
+
+
+<div class="bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-dark">
+    <div class="my-3 py-3">
+        <h2 class="display-5">Analyzing Your Expenses</h2>
+        <p class="lead">The expense chart shows your monthly expenditures. By examining this chart, you can monitor your spending habits and identify areas where you might cut costs.</p>
+    </div>
+    <div class="bg-light shadow-sm mx-auto" style="width: 70%; height: 400px; border-radius: 21px 21px 0 0;">
+        <div id="chartContainerE" class="chart bg-dark" style="height: 100%; width: 80%; margin: 0 auto;"></div>
+    </div>
+</div>
+<br>
+
+<Center><h1>Category Analysis</h1></Center>
+<div class="h-100 p-5 md-6">
+<strong><p>In addition to the monthly overviews, we provide pie charts for both income and expenses categorized by different
+        categories. This allows for a deeper analysis of where your money is coming from and where it is going.</p></strong>
+</div>
+</div>
+<div class="chart-container row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 p-10">
+    <div id="chartContainerEC" class="chart" style="height: 360px; width:50% ;align:left"></div>
+    <div id="chartContainerIC" class="chart" style="height: 360px;width:50%; align:left"></div>
+</div>
+{% endblock body %}

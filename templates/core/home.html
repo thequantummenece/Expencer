@@ -1,0 +1,208 @@
+{% extends 'basic.html' %}
+
+{% block script %}
+<script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+<script type="text/javascript">
+
+    window.onload = function () {
+        var chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            title:{
+                text: "Analyze your Expences like a pro"
+            },
+            data: [
+            {
+                // Change type to "doughnut", "line", "splineArea", etc.
+                type: "pie",
+                dataPoints: [
+                    { label: "", y: 10 },
+                    { label: "", y: 15 },
+                    { label: "", y: 25 },
+                    { label: "", y: 28 },
+                    { label: "", y: 30 },
+                    { label: "", y: 18 },]
+            }
+            ]
+        });
+        chart.render();
+    }
+</script>
+{% endblock script %}
+
+{% block stylish %}
+.combo-box {
+position: relative;
+display: inline-block;
+}
+
+.combo-input {
+width: 100%;
+box-sizing: border-box;
+}
+
+.combo-dropdown {
+position: absolute;
+z-index: 1;
+background-color: white;
+border: 1px solid #ccc;
+width: 100%;
+max-height: 150px;
+overflow-y: auto;
+display: none;
+}
+
+.combo-dropdown div {
+padding: 8px;
+cursor: pointer;
+}
+
+.combo-dropdown div:hover {
+background-color: #f1f1f1;
+}
+{% endblock stylish %}
+
+{% block title %}Home{% endblock title %}
+
+{% block homeactive %}active{% endblock homeactive %}
+
+{% block body %}
+
+<div class="modal fade bg-dark" id="Add_Expense" tabindex="-1" aria-labelledby="AddExpenseModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddExpenseModalLabel">Add your Expense Here</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/Expense" method="get">
+                    <div class="combo-box px-3 mb-3">
+                        <span class="input-group-text" id="ExpenseCategoryLabel">Categorize the Expense</span><br>
+                        <input type="text" class="combo-input" id="ExpenseCategoryInput" name="ExpenseCategoryInput"
+                               placeholder="Select your Category">
+                        <div class="combo-dropdown" id="ExpenseCategoryDropdown">
+                            {% for cat in allcatE %}
+                            <div>{{cat.category}}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="ExpenseNameLabel">Name your Expense</span>
+                        <input type="text" class="form-control" placeholder="Expense" aria-label="ExpenseName"
+                               aria-describedby="ExpenseNameLabel" id="ExpenseNameInput" name="ExpenseNameInput">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ExpenseAmountInput">Amount:</label>
+                        <input type="number" id="ExpenseAmountInput" name="ExpenseAmountInput" min="0">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ExpenseDateInput">Date:</label>
+                        <input type="date" id="ExpenseDateInput" name="ExpenseDateInput">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bg-dark" id="Add_Income" tabindex="-1" aria-labelledby="AddIncomeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddIncomeModalLabel">Add your Income Here</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/Income" method="get">
+                    <div class="combo-box px-3 mb-3">
+                        <span class="input-group-text" id="IncomeCategoryLabel">Categorize the Income</span><br>
+                        <input type="text" class="combo-input" id="IncomeCategoryInput" name="IncomeCategoryInput"
+                               placeholder="Select your Category">
+                        <div class="combo-dropdown" id="IncomeCategoryDropdown">
+                            {% for cat in allcatI %}
+                            <div>{{cat.category}}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="IncomeNameLabel">Name your Income</span>
+                        <input type="text" class="form-control" placeholder="Income" aria-label="IncomeName"
+                               aria-describedby="IncomeNameLabel" id="IncomeNameInput" name="IncomeNameInput">
+                    </div>
+                    <div class="mb-3">
+                        <label for="IncomeAmountInput">Amount:</label>
+                        <input type="number" id="IncomeAmountInput" name="IncomeAmountInput" min="0">
+                    </div>
+                    <div class="mb-3">
+                        <label for="IncomeDateInput">Date:</label>
+                        <input type="date" id="IncomeDateInput" name="IncomeDateInput">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    <div class="p-lg-5 my-5">
+        <h1 class="display-5 fw-bold">Expencer</h1>
+        <p class="col-md-8 fs-4">A simple fun way to keep track of your expences.</p>
+        <a class="btn btn-outline-secondary btn-lg" href="howto">Get Started</a>
+    </div>
+    <div id="chartContainer" style="width: 50%; height: 360px;"></div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function setupComboBox(comboInputId, comboDropdownId) {
+            const comboInput = document.getElementById(comboInputId);
+            const comboDropdown = document.getElementById(comboDropdownId);
+
+            comboInput.addEventListener('focus', function() {
+                comboDropdown.style.display = 'block';
+            });
+
+            comboInput.addEventListener('input', function() {
+                const filter = comboInput.value.toLowerCase();
+                const items = comboDropdown.getElementsByTagName('div');
+                for (let i = 0; i < items.length; i++) {
+                    const txtValue = items[i].textContent || items[i].innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        items[i].style.display = '';
+                    } else {
+                        items[i].style.display = 'none';
+                    }
+                }
+            });
+
+            comboDropdown.addEventListener('click', function(e) {
+                if (e.target && e.target.nodeName == "DIV") {
+                    comboInput.value = e.target.textContent;
+                    comboDropdown.style.display = 'none';
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!comboInput.contains(e.target) && !comboDropdown.contains(e.target)) {
+                    comboDropdown.style.display = 'none';
+                }
+            });
+        }
+
+        setupComboBox('ExpenseCategoryInput', 'ExpenseCategoryDropdown');
+        setupComboBox('IncomeCategoryInput', 'IncomeCategoryDropdown');
+    });
+</script>
+
+{% endblock body %}

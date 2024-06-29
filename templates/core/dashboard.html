@@ -1,0 +1,36 @@
+{% extends 'basic.html' %}
+
+{% block title %}DashBoard{% endblock title %}
+
+{% block dashboardactive %}active{% endblock dashboardactive %}
+{% block expmodelable %}disabled{% endblock expmodelable %}
+{% block incmodelable %}disabled{% endblock incmodelable %}
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mt-5 mb-5">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>Get Reports</h4>
+                </div>
+                <div class="card-body">
+                    <form action="/report" method="get">
+                        <div class="form-group m-3">
+                            <label for="startdate">From Date:</label>
+                            <input type="date" id="startdate" name="startdate" class="form-control" required>
+                        </div>
+                        <div class="form-group m-3">
+                            <label for="enddate">To Date:</label>
+                            <input type="date" id="enddate" name="enddate" class="form-control" required>
+                        </div>
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary btn-lg">Get Report</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}
