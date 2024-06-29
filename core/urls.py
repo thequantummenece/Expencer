@@ -8,5 +8,8 @@ urlpatterns = [
     path('Income',views.Income,name="Income"),
     path('Expense',views.Expense,name="Expense"),
     path('howto',views.howto,name="howto"),
-    path('report',views.report,name="report")
+    path('report',views.report,name="report"),
+    path('signin',views.signin,name = "signin"),
+    path('blogin',views.blogin,name = "blogin"),
+    path('blogout',views.blogout,name = "blogout")
 ]

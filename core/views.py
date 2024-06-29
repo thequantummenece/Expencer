@@ -8,6 +8,8 @@ from django.db.models import CharField, Value as V
 from django.db.models.functions import Concat
 from django.http import JsonResponse
 from django.db.models import Sum
+from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -138,3 +140,48 @@ def Expense(request):
 
 def howto(request):
     return HttpResponse("How to Page Coming Soon")
+
+def blogin(request):
+    if request.method =="POST":
+        #parameters for post
+        loginusername = request.POST["lusername"]
+        loginpassword = request.POST["Password"]
+
+        user = authenticate(username = loginusername,password = loginpassword)
+        if user is None:
+            messages.error(request,"Invalid Credentials")
+            return redirect('home')
+        else:
+            login(request, user)
+            messages.success(request,"Successfully logged in ")
+            return redirect('home')
+    else:return HttpResponse("Lawda")
+
+def blogout(request):
+    if request.method == "GET":
+        logout(request)
+        messages.warning(request, "You have been logged out")
+        return redirect('home')
+
+def signin(request):
+    if request.method == "POST":
+        # parameters
+        fname = request.POST['inputfname']
+        lname = request.POST['inputlname']
+        username = request.POST['username']
+        password = request.POST['password1']
+        password2 = request.POST['password2']
+        email = request.POST['inputemail']
+
+        if(password2 == password):
+            #creating user
+            myuser = User.objects.create_user(username,email,password)
+            myuser.first_name = fname
+            myuser.last_name = lname
+            myuser.save()
+            messages.add_message(request, messages.SUCCESS, 'your account has been created')
+            return redirect('home')
+
+        else:
+            messages.add_message(request, messages.ERROR, 'Error Signing in')
+            return redirect('home')
